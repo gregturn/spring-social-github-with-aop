@@ -8,6 +8,10 @@ import org.springframework.web.client.RestTemplate;
  */
 public class CachedGitHubTemplate extends GitHubTemplate {
 
+	public CachedGitHubTemplate(String githubToken) {
+		super(githubToken);
+	}
+
 	// TODO Implement extra GitHub operations not found in the project.
 
 	@Override
