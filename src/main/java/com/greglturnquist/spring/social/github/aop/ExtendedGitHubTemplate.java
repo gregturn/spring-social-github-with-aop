@@ -4,11 +4,13 @@ import org.springframework.social.github.api.impl.GitHubTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author gturnquist
+ * By extending {@link GitHubTemplate}, you can add new operations and also tweak the underlying {@link RestTemplate}.
+ *
+ * @author Greg Turnquist
  */
-public class CachedGitHubTemplate extends GitHubTemplate {
+public class ExtendedGitHubTemplate extends GitHubTemplate {
 
-	public CachedGitHubTemplate(String githubToken) {
+	public ExtendedGitHubTemplate(String githubToken) {
 		super(githubToken);
 	}
 

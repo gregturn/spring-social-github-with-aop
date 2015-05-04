@@ -45,7 +45,7 @@ public class HomeController {
 
 	@Bean
 	GitHubTemplate gitHubTemplate() {
-		return new CachedGitHubTemplate(githubToken);
+		return new ExtendedGitHubTemplate(githubToken);
 	}
 
 	@Autowired
