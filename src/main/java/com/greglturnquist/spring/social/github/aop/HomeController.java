@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.gemstone.gemfire.cache.Cache;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -12,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.gemfire.CacheFactoryBean;
+import org.springframework.data.gemfire.LocalRegionFactoryBean;
+import org.springframework.data.gemfire.support.GemfireCacheManager;
 import org.springframework.social.github.api.impl.GitHubTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,12 +48,33 @@ public class HomeController {
 	Description description;
 
 	@Bean
-	GitHubTemplate gitHubTemplate() {
-		return new ExtendedGitHubTemplate(githubToken);
+	GitHubTemplate createAGithubTemplate(RestTemplateAspect aspect) {
+		return new ExtendedGitHubTemplate(githubToken, aspect);
 	}
 
 	@Autowired
 	GitHubTemplate gitHubTemplate;
+
+	@Bean
+	CacheFactoryBean cacheFactoryBean() {
+		return new CacheFactoryBean();
+	}
+
+	@Bean
+	LocalRegionFactoryBean<String, String> localRegionFactoryBean(Cache cache) {
+		LocalRegionFactoryBean<String, String> factoryBean = new LocalRegionFactoryBean<>();
+		factoryBean.setCache(cache);
+		factoryBean.setName("github");
+		return factoryBean;
+	}
+
+	@Bean
+	GemfireCacheManager gemfireCacheManager(Cache cache, RestTemplateAspect aspect) {
+		GemfireCacheManager manager = new GemfireCacheManager();
+		manager.setCache(cache);
+		aspect.setCacheManager(manager);
+		return manager;
+	}
 
 	List<GitHubIssueAndRepoName> issues(String org, List<String> repos) {
 		return repos.stream()

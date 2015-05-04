@@ -1,5 +1,6 @@
 package com.greglturnquist.spring.social.github.aop;
 
+import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.social.github.api.impl.GitHubTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,15 +11,29 @@ import org.springframework.web.client.RestTemplate;
  */
 public class ExtendedGitHubTemplate extends GitHubTemplate {
 
-	public ExtendedGitHubTemplate(String githubToken) {
-		super(githubToken);
+	private static RestTemplateAspect aspect;
+
+	public ExtendedGitHubTemplate(String githubToken, RestTemplateAspect aspect) {
+		super(makeExtendedGitHubTemplate(githubToken, aspect));
 	}
 
-	// TODO Implement extra GitHub operations not found in the project.
+	private static String makeExtendedGitHubTemplate(String githubToken, RestTemplateAspect aspect) {
+		ExtendedGitHubTemplate.aspect = aspect;
+		return githubToken;
+	}
 
+	/**
+	 * Override Spring Social Core's passthrough, and replace RestTemplate with an advicsed instance.
+	 *
+	 * @param restTemplate
+	 * @return {@link RestTemplate} with a proxied version
+	 */
 	@Override
-	protected void configureRestTemplate(RestTemplate restTemplate) {
-		// Wrap the RestTemplate with caching somehow!
+	protected RestTemplate postProcess(RestTemplate restTemplate) {
+		AspectJProxyFactory factory = new AspectJProxyFactory(restTemplate);
+		factory.addAspect(ExtendedGitHubTemplate.aspect);
+		factory.setProxyTargetClass(true);
+		return factory.getProxy();
 	}
 
 }
