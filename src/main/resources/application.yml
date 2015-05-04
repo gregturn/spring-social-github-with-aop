@@ -1,0 +1,14 @@
+spring:
+  aop:
+    proxy-target-class: true
+
+github:
+  access:
+    token: 85bdfa77b42b7f6ac4b78f7459d8a93ca11ab9d8
+
+description:
+  sections:
+    -
+      prefix: "gs-"
+      toStrip: "/guides/gs/"
+      section: "/guides"

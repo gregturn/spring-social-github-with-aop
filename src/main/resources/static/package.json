@@ -1,0 +1,26 @@
+{
+  "name": "spring-social-github-and-aop",
+  "version": "1.0.0",
+  "description": "Demonstrate decorating the embedded RestTemplate",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gregturn/spring-a-gram.git"
+  },
+  "keywords": [
+    "spring",
+    "data",
+    "rest",
+    "hateoas",
+    "hypermedia"
+  ],
+  "author": "Greg L. Turnquist",
+  "license": "ASLv2",
+  "bugs": {
+    "url": "https://github.com/gregturn/spring-a-gram/issues"
+  },
+  "homepage": "https://github.com/gregturn/spring-a-gram",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "^1.3.12"
+  }
+}
