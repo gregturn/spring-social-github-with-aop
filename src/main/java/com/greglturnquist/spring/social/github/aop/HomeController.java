@@ -69,10 +69,9 @@ public class HomeController {
 	}
 
 	@Bean
-	GemfireCacheManager gemfireCacheManager(Cache cache, RestTemplateAspect aspect) {
+	GemfireCacheManager gemfireCacheManager(Cache cache) {
 		GemfireCacheManager manager = new GemfireCacheManager();
 		manager.setCache(cache);
-		aspect.setCacheManager(manager);
 		return manager;
 	}
 

@@ -11,27 +11,17 @@ import org.springframework.web.client.RestTemplate;
  */
 public class ExtendedGitHubTemplate extends GitHubTemplate {
 
-	private static RestTemplateAspect aspect;
+	private final RestTemplateAspect aspect;
 
 	public ExtendedGitHubTemplate(String githubToken, RestTemplateAspect aspect) {
-		super(makeExtendedGitHubTemplate(githubToken, aspect));
+		super(githubToken);
+		this.aspect = aspect;
 	}
 
-	private static String makeExtendedGitHubTemplate(String githubToken, RestTemplateAspect aspect) {
-		ExtendedGitHubTemplate.aspect = aspect;
-		return githubToken;
-	}
-
-	/**
-	 * Override Spring Social Core's passthrough, and replace RestTemplate with an advicsed instance.
-	 *
-	 * @param restTemplate
-	 * @return {@link RestTemplate} with a proxied version
-	 */
 	@Override
 	protected RestTemplate postProcess(RestTemplate restTemplate) {
-		AspectJProxyFactory factory = new AspectJProxyFactory(restTemplate);
-		factory.addAspect(ExtendedGitHubTemplate.aspect);
+		AspectJProxyFactory factory = new AspectJProxyFactory(super.getRestTemplate());
+		factory.addAspect(this.aspect);
 		factory.setProxyTargetClass(true);
 		return factory.getProxy();
 	}
